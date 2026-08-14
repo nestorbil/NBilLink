@@ -11,7 +11,8 @@ document.querySelectorAll("[data-link]").forEach((element) => {
 
 const logo = document.querySelector(".logo");
 if (logo && nitroConfig.logo) logo.src = nitroConfig.logo;
-document.querySelector("#year").textContent = new Date().getFullYear();
+const year = document.querySelector("#year");
+if (year) year.textContent = new Date().getFullYear();
 
 /* Статичный знак виден до запуска ролика и остаётся при ошибке видео. */
 const logoPanel = document.querySelector(".logo-panel.has-video");
