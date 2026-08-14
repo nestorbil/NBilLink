@@ -26,21 +26,6 @@
   transform-origin: center;
 }
 
-.logo-panel.has-video .logo-fallback {
-  position: absolute;
-  z-index: 0;
-  inset: 10% 7%;
-  width: 86%;
-  height: 80%;
-  object-fit: contain;
-  mix-blend-mode: screen;
-  transition: opacity 260ms ease;
-}
-
-.logo-panel.has-video.is-video-playing .logo-fallback {
-  opacity: 0;
-}
-
 /* Чёрные пиксели PNG сливаются с фоном, остаётся красный знак. */
 .link-card .nitro-icon {
   background: #100c0d !important;
@@ -63,18 +48,23 @@
 .section-label.reveal-item {
   opacity: 0;
   filter: blur(5px);
-  transform: translate(var(--reveal-x, 0), 34px) scale(0.94);
+  transform: translateY(58px) scale(0.96);
 }
 
 .link-card.reveal-item.is-visible,
 .section-label.reveal-item.is-visible {
-  animation: nitro-card-arrival 1s var(--reveal-delay, 0ms) cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: nitro-card-arrival 1.15s var(--reveal-delay, 0ms) cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes nitro-card-arrival {
+  70% {
+    opacity: 1;
+    filter: blur(0.4px);
+  }
+
   to {
     opacity: 1;
     filter: blur(0);
-    transform: translate(0, 0) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
