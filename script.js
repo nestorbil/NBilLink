@@ -14,6 +14,15 @@ if (logo && nitroConfig.logo) logo.src = nitroConfig.logo;
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
+/* Запускаем ролик один раз сразу после открытия страницы. */
+const logoVideo = document.querySelector(".logo-video");
+if (logoVideo) {
+  logoVideo.muted = true;
+  const startLogoVideo = () => logoVideo.play().catch(() => {});
+  logoVideo.addEventListener("canplay", startLogoVideo, { once: true });
+  startLogoVideo();
+}
+
 /* Карточки появляются один раз, когда пользователь до них долистывает. */
 const animatedItems = [...document.querySelectorAll(".link-card, .section-label")];
 let readyToReveal = false;
@@ -25,7 +34,7 @@ animatedItems.forEach((element, index) => {
 
 const revealScrolledItems = () => {
   if (!readyToReveal) return;
-  const revealLine = window.innerHeight * 0.86;
+  const revealLine = window.innerHeight * 0.96;
   animatedItems.forEach((element) => {
     if (element.classList.contains("is-visible")) return;
     if (element.getBoundingClientRect().top < revealLine) {
