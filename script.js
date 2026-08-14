@@ -14,15 +14,6 @@ if (logo && nitroConfig.logo) logo.src = nitroConfig.logo;
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
-/* Статичный знак виден до запуска ролика и остаётся при ошибке видео. */
-const logoPanel = document.querySelector(".logo-panel.has-video");
-const logoVideo = document.querySelector(".logo-video");
-if (logoPanel && logoVideo) {
-  logoVideo.addEventListener("playing", () => logoPanel.classList.add("is-video-playing"), { once: true });
-  logoVideo.addEventListener("error", () => logoPanel.classList.add("video-unavailable"), { once: true });
-  logoVideo.play().catch(() => logoPanel.classList.add("video-unavailable"));
-}
-
 /* Карточки появляются один раз, когда пользователь до них долистывает. */
 const animatedItems = [...document.querySelectorAll(".link-card, .section-label")];
 let readyToReveal = false;
@@ -30,7 +21,6 @@ let readyToReveal = false;
 animatedItems.forEach((element, index) => {
   element.classList.add("reveal-item");
   element.style.setProperty("--reveal-delay", `${Math.min(index % 3, 2) * 150}ms`);
-  element.style.setProperty("--reveal-x", index % 2 ? "48px" : "-48px");
 });
 
 const revealScrolledItems = () => {
