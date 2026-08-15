@@ -1,11 +1,11 @@
 /* Подстановка текстов и ссылок из config.js. */
 document.querySelectorAll("[data-text]").forEach((element) => {
-  const value = window.nitroConfig?.text?.[element.dataset.text];
+  const value = typeof nitroConfig !== "undefined" ? nitroConfig.text?.[element.dataset.text] : null;
   if (value) element.textContent = value;
 });
 
 document.querySelectorAll("[data-link]").forEach((element) => {
-  const url = window.nitroConfig?.links?.[element.dataset.link];
+  const url = typeof nitroConfig !== "undefined" ? nitroConfig.links?.[element.dataset.link] : null;
   if (url) element.href = url;
 });
 
