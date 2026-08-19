@@ -1,49 +1,83 @@
 /* Подстановка текстов и ссылок из config.js. */
+const siteConfig = typeof nitroConfig !== "undefined" ? nitroConfig : null;
+
 document.querySelectorAll("[data-text]").forEach((element) => {
-  const value = typeof nitroConfig !== "undefined" ? nitroConfig.text?.[element.dataset.text] : null;
+  const value = siteConfig?.text?.[element.dataset.text];
   if (value) element.textContent = value;
 });
 
 document.querySelectorAll("[data-link]").forEach((element) => {
-  const url = typeof nitroConfig !== "undefined" ? nitroConfig.links?.[element.dataset.link] : null;
+  const url = siteConfig?.links?.[element.dataset.link];
   if (url) element.href = url;
 });
 
 const year = document.querySelector("#year");
 if (year) year.textContent = new Date().getFullYear();
 
-/* WebM stays animated where VP9 alpha is reliable; CSS uses the PNG on WebKit. */
+/* Plays the transparent video where supported; iPhone gets a CSS logo fallback. */
 const logoVideo = document.querySelector(".logo-video");
-if (logoVideo && getComputedStyle(logoVideo).display !== "none") {
+const logoPanel = document.querySelector(".logo-panel");
+let videoFallbackTimer;
+
+const showLogoFallback = () => {
+  if (logoPanel) logoPanel.classList.add("is-fallback");
+};
+
+const showLogoVideo = () => {
+  window.clearTimeout(videoFallbackTimer);
+  if (logoPanel) logoPanel.classList.remove("is-fallback");
+};
+
+if (logoVideo) {
   logoVideo.muted = true;
-  const startLogoVideo = () => logoVideo.play().catch(() => {});
-  logoVideo.addEventListener("canplay", startLogoVideo, { once: true });
+  const startLogoVideo = () => logoVideo.play().catch(showLogoFallback);
+
+  logoVideo.addEventListener("canplay", () => {
+    showLogoVideo();
+    startLogoVideo();
+  }, { once: true });
+
+  logoVideo.addEventListener("error", showLogoFallback, { once: true });
+
+  videoFallbackTimer = window.setTimeout(() => {
+    if (logoVideo.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) showLogoFallback();
+  }, 2200);
+
   startLogoVideo();
 }
 
-/* Kontakt is visible immediately. Other sections reveal progressively. */
-const animatedItems = [...document.querySelectorAll(".link-card:not(.contact-item), .section-label:not(.contact-item)")];
+/* Kontakt enters immediately; later sections still rise into view on scroll. */
+const animatedItems = [...document.querySelectorAll(".link-card, .section-label")];
+const immediateItems = animatedItems.filter((element) => element.dataset.reveal === "immediate");
+let readyToReveal = false;
+let immediateIndex = 0;
 
 animatedItems.forEach((element, index) => {
   element.classList.add("reveal-item");
-  element.style.setProperty("--reveal-delay", `${Math.min(index % 3, 2) * 150}ms`);
+  const delay = element.dataset.reveal === "immediate"
+    ? immediateIndex++ * 110
+    : Math.min(index % 3, 2) * 150;
+  element.style.setProperty("--reveal-delay", `${delay}ms`);
 });
 
-const revealItems = () => {
+const revealScrolledItems = () => {
+  if (!readyToReveal) return;
+
   const revealLine = window.innerHeight * 0.96;
   animatedItems.forEach((element) => {
-    if (element.classList.contains("is-visible")) return;
+    if (element.dataset.reveal === "immediate" || element.classList.contains("is-visible")) return;
     if (element.getBoundingClientRect().top < revealLine) element.classList.add("is-visible");
   });
 };
 
-window.addEventListener("scroll", revealItems, { passive: true });
-window.addEventListener("resize", revealItems);
-requestAnimationFrame(() => requestAnimationFrame(revealItems));
+window.addEventListener("scroll", revealScrolledItems, { passive: true });
+window.addEventListener("resize", revealScrolledItems);
+window.addEventListener("load", revealScrolledItems, { once: true });
 
-/* Last-resort guard for older WebKit or interrupted initialization. */
-window.setTimeout(() => {
-  animatedItems.forEach((element) => {
-    if (!element.classList.contains("is-visible")) element.classList.add("reveal-fallback");
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    readyToReveal = true;
+    immediateItems.forEach((element) => element.classList.add("is-visible"));
+    revealScrolledItems();
   });
-}, 2500);
+});
