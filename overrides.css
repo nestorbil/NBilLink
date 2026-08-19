@@ -70,21 +70,63 @@
 }
 
 
-/* The transparent PNG stays behind the video and replaces VP9 alpha on WebKit. */
+/* iPhone fallback: a transparent CSS entrance if VP9 WebM cannot play. */
 .logo-panel.has-video .logo-fallback {
-  display: none;
   position: absolute;
   z-index: 2;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transform: scale(1.32);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-5%) scale(1.2);
 }
 
-@supports (-webkit-touch-callout: none) {
-  .logo-panel.has-video .logo-video { display: none; }
-  .logo-panel.has-video .logo-fallback { display: block; }
+.logo-panel.has-video.is-fallback .logo-video {
+  visibility: hidden;
+}
+
+.logo-panel.has-video.is-fallback .logo-fallback {
+  animation: nitro-fallback-logo 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes nitro-fallback-logo {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-12%) scale(1.04);
+  }
+
+  70% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0) scale(1.2);
+  }
+}
+
+/* The supplied WhatsApp logo is recolored to the same red as the other icons. */
+.link-card > .icon.whatsapp-icon {
+  position: relative;
+  color: var(--red-bright);
+  overflow: hidden;
+}
+
+.whatsapp-icon img {
+  display: none;
+}
+
+.whatsapp-icon::before {
+  content: "";
+  width: 29px;
+  height: 29px;
+  background: currentColor;
+  -webkit-mask: url("whatsapp-logo.webp") center / contain no-repeat;
+  mask: url("whatsapp-logo.webp") center / contain no-repeat;
 }
 
 /* A script failure must never leave cards invisible. */
@@ -93,4 +135,14 @@
   filter: none !important;
   transform: none !important;
   animation: none !important;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-panel.has-video.is-fallback .logo-fallback {
+    animation: none;
+    opacity: 1;
+    clip-path: none;
+    transform: scale(1.2);
+  }
 }
