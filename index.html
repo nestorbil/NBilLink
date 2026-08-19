@@ -7,7 +7,7 @@
     <meta name="description" content="Nitro Autoteile – alle wichtigen Links und Kontaktmöglichkeiten." />
     <title>Nitro Autoteile</title>
     <link rel="stylesheet" href="styles.css?v=20260815-1" />
-    <link rel="stylesheet" href="overrides.css?v=20260815-1" />
+    <link rel="stylesheet" href="overrides.css?v=20260820-2" />
   </head>
   <body>
     <!-- Локальные векторные иконки: чёткие и ровные на любом экране. -->
@@ -27,10 +27,11 @@
     <main class="page-shell">
       <header class="brand-area">
         <div class="logo-panel has-video">
-          <img class="logo-fallback" src="nitro-logo-clean.png" alt="Nitro Autoteile" />
-          <video class="logo-video" autoplay muted playsinline preload="metadata" aria-hidden="true">
+          <video class="logo-video" autoplay muted playsinline preload="auto" aria-label="Анимация логотипа Nitro Autoteile">
             <source src="nitro-logo-deep-red.webm" type="video/webm; codecs=vp9" />
+            Ваш браузер не поддерживает видео.
           </video>
+          <img class="logo-fallback" src="nitro-logo-clean.png" alt="" aria-hidden="true" />
         </div>
         <p data-text="tagline">Ersatzteile & Zubehör</p>
         <div class="rating" aria-label="Google Bewertung 4,8 von 5">
@@ -46,14 +47,14 @@
           <span class="icon"><svg><use href="#pin" /></svg></span><span><strong>Google Maps</strong><small data-text="address">Böttgerstraße 7 · 13357 Berlin</small></span><b><svg><use href="#arrow" /></svg></b>
         </a>
 
-        <p class="section-label contact-item">Kontakt</p>
-        <a class="link-card contact-item" data-link="whatsapp" target="_blank" rel="noopener">
-          <span class="icon"><svg><use href="#whatsapp" /></svg></span><span><strong>WhatsApp</strong><small>Schreib uns direkt</small></span><b><svg><use href="#arrow" /></svg></b>
+        <p class="section-label" data-reveal="immediate">Kontakt</p>
+        <a class="link-card" data-reveal="immediate" data-link="whatsapp" target="_blank" rel="noopener">
+          <span class="icon whatsapp-icon"><img src="whatsapp-logo.webp" alt="" /></span><span><strong>WhatsApp</strong><small>Schreib uns direkt</small></span><b><svg><use href="#arrow" /></svg></b>
         </a>
-        <a class="link-card contact-item" data-link="phone">
+        <a class="link-card" data-reveal="immediate" data-link="phone">
           <span class="icon"><svg><use href="#phone" /></svg></span><span><strong>Anrufen</strong><small data-text="phoneDisplay">+49 30 767 95 242</small></span><b><svg><use href="#arrow" /></svg></b>
         </a>
-        <a class="link-card contact-item" data-link="email">
+        <a class="link-card" data-reveal="immediate" data-link="email">
           <span class="icon"><svg><use href="#mail" /></svg></span><span><strong>E-Mail</strong><small data-text="email">info@nitroautoteile.de</small></span><b><svg><use href="#arrow" /></svg></b>
         </a>
 
@@ -71,6 +72,6 @@
       <footer>© 2026 NBilLink <span class="footer-dot">•</span> Berlin</footer>
     </main>
     <script src="config.js?v=20260812-2"></script>
-    <script src="script.js?v=20260815-1"></script>
+    <script src="script.js?v=20260820-2"></script>
   </body>
 </html>
